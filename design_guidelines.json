@@ -1,0 +1,99 @@
+{
+  "brand_identity": {
+    "emotion": "Reverence, profound warmth, ancient wisdom meeting modern elegance",
+    "tone": "Spiritual, serene, yet bold and award-worthy",
+    "core_aesthetic": "Organic & Earthy meets Editorial Future. Warm Indian spiritual palette with stark, highly crafted typography."
+  },
+  "typography": {
+    "fonts": [
+      {
+        "family": "Cormorant Garamond",
+        "url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap",
+        "usage": "Primary headings (H1, H2), editorial blockquotes. Highly stylized, often italicized for impact."
+      },
+      {
+        "family": "Outfit",
+        "url": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap",
+        "usage": "Body text, navigation, buttons, tiny uppercase labels."
+      }
+    ],
+    "rules": {
+      "h1": "text-5xl md:text-7xl lg:text-[7vw] leading-[0.9] tracking-tighter font-serif",
+      "h2": "text-4xl md:text-5xl lg:text-6xl leading-tight font-serif",
+      "labels": "text-xs tracking-[0.2em] uppercase font-sans font-semibold text-[var(--accent-saffron)]",
+      "body": "text-base md:text-lg leading-relaxed text-[var(--text-secondary)] font-sans"
+    }
+  },
+  "color_system": {
+    "css_variables": {
+      "--bg-primary": "#FDFBF7",
+      "--bg-secondary": "#F3EFE7",
+      "--bg-dark": "#161211",
+      "--bg-maroon": "#591316",
+      "--text-primary": "#2C2621",
+      "--text-secondary": "#6A6057",
+      "--text-inverse": "#FDFBF7",
+      "--accent-saffron": "#D95A21",
+      "--border-light": "#E8E2D9",
+      "--border-dark": "#3A2F2A"
+    }
+  },
+  "layout_grids": {
+    "spacing": "Generous. py-24 to py-32 for sections. Gap-8 to gap-12 for grids.",
+    "bento_mode_a": "Asymmetrical tetris-like grids for 'Our Activities'. Do not make uniform 3-column squares. Mix heights and widths."
+  },
+  "motion_interactions": {
+    "scrolling": {
+      "library": "@studio-freight/react-lenis",
+      "instructions": "Implement Lenis for momentum scrolling to give a premium feel."
+    },
+    "hero_reveal": {
+      "library": "framer-motion",
+      "instructions": "Masked line-by-line reveal. Split text, wrap each line in overflow-hidden, and translate Y from 100% to 0% with easeOut."
+    },
+    "parallax": {
+      "instructions": "Use framer-motion useScroll and useTransform to move hero images at a different speed than the document scroll."
+    },
+    "scroll_reveal": {
+      "instructions": "Elements slide up slightly (y: 30, opacity: 0 to 1) whileInView, once: true. Use staggerChildren for lists."
+    }
+  },
+  "component_architecture": {
+    "navigation": "Sticky top, backdrop-blur-xl bg-[#FDFBF7]/80, sharp bottom border. Links hover to Saffron.",
+    "hero": "Massive 'SRI BHAVATARINI ASHRAMA' kinetic text. A central arched/clipped image container with parallax. Must feel cinematic.",
+    "marquee": "react-fast-marquee. 'Divine Mother Tradition • Spiritual Awakening • Seva'. Large serif italics, slow speed.",
+    "about_us": "Numbered manifesto format (01 / The Tradition). Large quote on left, dense body text on right.",
+    "activities": "Bento Grid cards. Very subtle background, 1px border. Hover makes image scale 1.05.",
+    "events": "Minimalist list view. Huge dates (e.g., '15' in Serif), smaller month. Border bottom separators. Saffron highlight on hover.",
+    "gallery": "Masonry or tight grid. Admin CMS managed. Click opens framer-motion lightbox or simple modal.",
+    "donate": "Full width dark maroon background. Saffron CTA buttons for Razorpay ₹1001, ₹5001 presets. White text.",
+    "contact": "Clean form layout. Use Shadcn UI Inputs but with no border radius and flat styling."
+  },
+  "image_urls": {
+    "hero_arch": "https://images.unsplash.com/photo-1566915682737-3e97a7eed93b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzF8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB0ZW1wbGUlMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzg0OTg1Njk5fDA&ixlib=rb-4.1.0&q=85",
+    "tradition_marigold": "https://images.pexels.com/photos/8819252/pexels-photo-8819252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "meditation_activity": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwcGVhY2UlMjBzcGlyaXR1YWxpdHl8ZW58MHx8fHwxNzg1MDcyNjk3fDA&ixlib=rb-4.1.0&q=85",
+    "gallery_1_gopuram": "https://images.unsplash.com/photo-1538460120076-604b93a2ce88?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzF8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB0ZW1wbGUlMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzg0OTg1Njk5fDA&ixlib=rb-4.1.0&q=85",
+    "gallery_2_diyas": "https://images.unsplash.com/photo-1577083753695-e010191bacb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxkaXdhbGklMjBsYW1wcyUyMGRpeWFzfGVufDB8fHx8MTc4NTA3MjcwN3ww&ixlib=rb-4.1.0&q=85",
+    "gallery_3_flowers": "https://images.pexels.com/photos/27809239/pexels-photo-27809239.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: Write Javascript (.js/.jsx) only. No Typescript.",
+    "CRITICAL: Do not use generic purple/blue gradients or generic center alignment.",
+    "CRITICAL: Apply 'data-testid' to all interactive elements (buttons, inputs, links, form submits) for testing.",
+    "CRITICAL: Do not use `transition: all` in CSS. Target specific properties.",
+    "CRITICAL: Use lucide-react for all icons, keeping stroke width 1.5 for elegance.",
+    "Implement @studio-freight/react-lenis for smooth scrolling in the main Layout. Give it momentum.",
+    "Implement Framer Motion for scroll reveals, kinetic line-by-line text reveals, and parallax.",
+    "Override default Shadcn UI styles to remove heavy rounded corners. We want an editorial, slightly sharp aesthetic.",
+    "No transparent dropdowns/headers. Always use backdrop-blur or solid background."
+  ],
+  "universal_guidelines_for_main_agent": [
+    "Prioritize Awwwards-style typography: huge serifs with incredibly tight tracking for headings.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Create depth through layered design elements and subtle parallax, NOT heavy drop shadows.",
+    "Every interaction needs micro-animations (hover states, scale up on images).",
+    "Respect 'prefers-reduced-motion'.",
+    "Never use AI assistant Emoji characters (like robot, brain, lightbulb, target) in the UI."
+  ]
+}
