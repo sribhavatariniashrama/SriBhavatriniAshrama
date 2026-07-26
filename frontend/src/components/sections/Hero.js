@@ -3,8 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { KineticLines } from "../motion";
 import { ArrowDown } from "lucide-react";
 
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1566915682737-3e97a7eed93b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzF8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjB0ZW1wbGUlMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzg0OTg1Njk5fDA&ixlib=rb-4.1.0&q=85";
+const HERO_IMG = "/hero-altar.webp";
 
 const Hero = () => {
   const ref = useRef(null);
@@ -21,19 +20,15 @@ const Hero = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
             className="label-eyebrow mb-6 flex items-center gap-3">
             <span className="inline-block w-10 h-px" style={{ background: "var(--accent-saffron)" }} />
-            Divine Mother Tradition · Bengaluru
+            Kali-Ramakrishna-Sharada-Vivekananda Parampara
           </motion.div>
-          <h1 className="font-serif font-500 tracking-tighter leading-[0.88] text-[15vw] lg:text-[8.5vw]"
+          <h1 className="font-serif font-500 tracking-tighter leading-[0.88] text-[13vw] lg:text-[7vw]"
             style={{ color: "var(--text-primary)" }}>
-            <KineticLines lines={["Sri", "Bhavatarini"]} delay={0.3} />
-            <span className="block italic" style={{ color: "var(--accent-saffron)" }}>
-              <KineticLines lines={["Ashrama"]} delay={0.6} />
-            </span>
+            <KineticLines lines={["Sri Bhavatarini", "Ashrama"]} delay={0.3} />
           </h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }}
             className="mt-8 max-w-md font-sans text-base md:text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            A serene sanctuary where ancient devotion meets stillness — a home for
-            seekers walking the path of the Divine Mother.
+            A serene sanctuary where devotion meets knowledge — a home for spiritual seekers.
           </motion.p>
         </motion.div>
 
