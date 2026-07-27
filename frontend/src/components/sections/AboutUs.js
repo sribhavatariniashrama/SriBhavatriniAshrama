@@ -14,7 +14,7 @@ const CHAPTERS = [
   {
     n: "03",
     title: "The Path of Seva",
-    body: "Spirituality without compassion is incomplete. Through annadana, community care and education, we let devotion overflow into action — serving the Mother by serving all her children.",
+    body: "Spirituality without Seva is incomplete. Through community care, education and medical help, we serve the Mother by serving all her children.",
   },
 ];
 
