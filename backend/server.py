@@ -404,9 +404,8 @@ async def startup():
                                   {"$set": {"password_hash": hash_password(ADMIN_PASSWORD)}})
     if await db.events.count_documents({}) == 0:
         samples = [
-            {"title": "Guru Purnima Celebration", "description": "A day of gratitude honouring the lineage of teachers with special puja, bhajans and prasad.", "date": "2026-07-10", "time": "6:00 AM", "location": "Main Prayer Hall"},
-            {"title": "Navaratri — Nine Nights of the Mother", "description": "Nine days of devotion to the Divine Mother with daily aarti, chanting and cultural offerings.", "date": "2026-10-11", "time": "6:30 PM", "location": "Ashrama Grounds"},
-            {"title": "Annadana Seva Day", "description": "Community meal service — volunteer to serve sanctified food to all who visit.", "date": "2026-02-15", "time": "11:00 AM", "location": "Community Kitchen"},
+            {"title": "Sri Krishna Janmashtami", "description": "Celebrating the birth of Lord Sri Krishna with special puja, bhajans and midnight aarti.", "date": "2026-09-04", "time": "6:00 PM", "location": "Main Prayer Hall"},
+            {"title": "Navaratri — Nine Nights of the Mother", "description": "Nine days of devotion to the Divine Mother with Pooja, chanting and bhajans.", "date": "2026-10-11", "time": "6:30 PM", "location": "Ashrama Grounds"},
         ]
         for s in samples:
             s["id"] = str(uuid.uuid4())

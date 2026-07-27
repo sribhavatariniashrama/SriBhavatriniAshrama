@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 const FALLBACK = [
   { id: "f1", url: "/gallery-durga.webp", caption: "Sri Ramakrishna Paramahamsa" },
   { id: "f2", url: "/gallery-ramakrishna.webp", caption: "Sri Durga" },
-  { id: "f3", url: "/gallery-sarada-aarti.webp", caption: "Sri Durga" },
+  { id: "f3", url: "/gallery-sarada-aarti.webp", caption: "Flower Offering" },
   { id: "f4", url: "/gallery-hibiscus.webp", caption: "Arati to Sharada Devi" },
 ];
 
