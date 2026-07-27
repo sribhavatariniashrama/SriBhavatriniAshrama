@@ -4,7 +4,7 @@ const CHAPTERS = [
   {
     n: "01",
     title: "The Tradition",
-    body: "Sri Bhavatarini Ashrama is rooted in the timeless worship of the Divine Mother — Bhavatarini, 'she who ferries us across the ocean of existence.' Our practice weaves together devotion, meditation and selfless service into a single living path.",
+    body: "Sri Bhavatarini Ashrama is rooted in the timeless worship of the Divine Mother — both as Bhavatarini Kali, the embodiment of strength and fearlessness, and as Sri Sarada Devi, the personification of motherly love and fortitude.",
   },
   {
     n: "02",

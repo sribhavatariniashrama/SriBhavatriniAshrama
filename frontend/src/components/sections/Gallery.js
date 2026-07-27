@@ -5,9 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
 const FALLBACK = [
-  { id: "f1", url: "https://images.unsplash.com/photo-1538460120076-604b93a2ce88?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzF8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjB0ZW1wbGUlMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzg0OTg1Njk5fDA&ixlib=rb-4.1.0&q=85", caption: "The Gopuram" },
-  { id: "f2", url: "https://images.unsplash.com/photo-1577083753695-e010191bacb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxkaXdhbGklMjBsYW1wcyUyMGRpeWFzfGVufDB8fHx8MTc4NTA3MjcwN3ww&ixlib=rb-4.1.0&q=85", caption: "Festival of Lights" },
-  { id: "f3", url: "https://images.pexels.com/photos/27809239/pexels-photo-27809239.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", caption: "Sacred Offerings" },
+  { id: "f1", url: "/gallery-durga.webp", caption: "Mother Durga — Mahishasuramardini" },
+  { id: "f2", url: "/gallery-ramakrishna.webp", caption: "Sri Ramakrishna Paramahamsa" },
+  { id: "f3", url: "/gallery-sarada-aarti.webp", caption: "Aarti to Holy Mother Sri Sarada Devi" },
+  { id: "f4", url: "/gallery-hibiscus.webp", caption: "Sacred Offering" },
 ];
 
 const Gallery = () => {
