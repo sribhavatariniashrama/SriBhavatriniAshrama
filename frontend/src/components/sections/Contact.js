@@ -44,7 +44,7 @@ const Contact = () => {
           <div className="mt-10 overflow-hidden border" style={{ borderColor: "var(--border-light)" }}>
             <iframe title="map" width="100%" height="240" style={{ border: 0, filter: "grayscale(0.2)" }}
               loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q=Saraswatinagar,Vijayanagar,Bengaluru+560040&output=embed" />
+              src="https://www.google.com/maps?q=282,+12th+Cross,+Saraswatinagar,+Vijayanagar,+Bengaluru+560040&z=17&output=embed" />
           </div>
         </Reveal>
 
