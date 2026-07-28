@@ -8,6 +8,16 @@ import { LogOut, Trash2, Plus, Upload, Pencil, X } from "lucide-react";
 
 const EMPTY_EVENT = { title: "", description: "", date: "", time: "", location: "" };
 
+const PHOTO_CATEGORIES = [
+  { value: "gallery", label: "Gallery" },
+  { value: "ashrama", label: "Our Ashrama (Home slider)" },
+  { value: "spiritual", label: "Activity · Spiritual Activities" },
+  { value: "values", label: "Activity · Excellence Through Values" },
+  { value: "service", label: "Activity · Service Projects" },
+  { value: "tribal", label: "Activity · Tribal Welfare" },
+];
+const catLabel = (v) => (PHOTO_CATEGORIES.find((c) => c.value === v) || {}).label || v;
+
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -19,13 +29,20 @@ const AdminDashboard = () => {
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [caption, setCaption] = useState("");
+  const [uploadCategory, setUploadCategory] = useState("gallery");
+  const [galleryFilter, setGalleryFilter] = useState("all");
+  const [activities, setActivities] = useState([]);
+  const [activityDrafts, setActivityDrafts] = useState({});
 
   const loadAll = useCallback(async () => {
     try {
-      const [e, g, m, d] = await Promise.all([
-        api.get("/events"), api.get("/gallery"), api.get("/messages"), api.get("/donations"),
+      const [e, g, m, d, a] = await Promise.all([
+        api.get("/events"), api.get("/gallery"), api.get("/messages"), api.get("/donations"), api.get("/activities"),
       ]);
-      setEvents(e.data); setGallery(g.data); setMessages(m.data); setDonations(d.data);
+      setEvents(e.data); setGallery(g.data); setMessages(m.data); setDonations(d.data); setActivities(a.data);
+      const drafts = {};
+      a.data.forEach((grp) => { drafts[grp.key] = (grp.subgroups || []).join("\n"); });
+      setActivityDrafts(drafts);
     } catch (err) {
       if (err.response?.status === 401) { logout(); navigate("/admin/login"); }
     }
@@ -59,6 +76,7 @@ const AdminDashboard = () => {
     const fd = new FormData();
     fd.append("file", file);
     fd.append("caption", caption);
+    fd.append("category", uploadCategory);
     try {
       await api.post("/gallery", fd, { headers: { "Content-Type": "multipart/form-data" } });
       toast.success("Image uploaded");
@@ -71,6 +89,15 @@ const AdminDashboard = () => {
   const deleteImage = async (id) => {
     try { await api.delete(`/gallery/${id}`); toast.success("Image removed"); loadAll(); }
     catch { toast.error("Could not delete"); }
+  };
+
+  const saveActivity = async (key) => {
+    const subgroups = (activityDrafts[key] || "").split("\n").map((s) => s.trim()).filter(Boolean);
+    try {
+      await api.put(`/activities/${key}`, { subgroups });
+      toast.success("Activity updated");
+      loadAll();
+    } catch (err) { toast.error(formatApiErrorDetail(err.response?.data?.detail)); }
   };
 
   const inputCls = "w-full px-4 py-3 font-sans outline-none border focus:border-[var(--accent-saffron)] transition-colors";
@@ -97,6 +124,7 @@ const AdminDashboard = () => {
         <Tabs defaultValue="events">
           <TabsList data-testid="admin-tabs" className="mb-8 flex-wrap h-auto">
             <TabsTrigger value="events" data-testid="tab-events">Events</TabsTrigger>
+            <TabsTrigger value="activities" data-testid="tab-activities">Activities</TabsTrigger>
             <TabsTrigger value="gallery" data-testid="tab-gallery">Gallery</TabsTrigger>
             <TabsTrigger value="messages" data-testid="tab-messages">Messages ({messages.length})</TabsTrigger>
             <TabsTrigger value="donations" data-testid="tab-donations">Donations ({donations.length})</TabsTrigger>
@@ -138,26 +166,67 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
-          {/* GALLERY */}
+          {/* ACTIVITIES */}
+          <TabsContent value="activities">
+            <p className="font-sans mb-6" style={{ color: "var(--text-secondary)" }}>
+              Edit the sub-groups shown under each activity. One item per line. Upload photos for each group from the Gallery tab (choose the matching category).
+            </p>
+            <div className="space-y-4">
+              {activities.map((grp) => (
+                <div key={grp.key} data-testid={`admin-activity-${grp.key}`} className="p-6" style={{ background: "var(--bg-primary)" }}>
+                  <h3 className="font-serif text-2xl mb-3" style={{ color: "var(--text-primary)" }}>{grp.title}</h3>
+                  <textarea data-testid={`activity-subgroups-${grp.key}`} rows={5}
+                    value={activityDrafts[grp.key] || ""}
+                    onChange={(e) => setActivityDrafts({ ...activityDrafts, [grp.key]: e.target.value })}
+                    className={inputCls + " resize-none"} style={inputStyle} />
+                  <button data-testid={`activity-save-${grp.key}`} onClick={() => saveActivity(grp.key)}
+                    className="mt-3 px-6 py-2.5 font-sans" style={{ background: "var(--accent-saffron)", color: "var(--text-inverse)" }}>
+                    Save {grp.title.split(" ")[0]}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
           <TabsContent value="gallery">
             <div className="p-6 mb-8" style={{ background: "var(--bg-primary)" }}>
               <h3 className="font-serif text-2xl mb-4" style={{ color: "var(--text-primary)" }}>Upload Image</h3>
-              <input data-testid="gallery-caption" placeholder="Caption (optional)" value={caption} onChange={(e) => setCaption(e.target.value)} className={inputCls + " mb-4"} style={inputStyle} />
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <input data-testid="gallery-caption" placeholder="Caption (optional)" value={caption} onChange={(e) => setCaption(e.target.value)} className={inputCls} style={inputStyle} />
+                <select data-testid="gallery-category" value={uploadCategory} onChange={(e) => setUploadCategory(e.target.value)} className={inputCls} style={inputStyle}>
+                  {PHOTO_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+                </select>
+              </div>
               <label data-testid="gallery-upload-label" className="inline-flex items-center gap-2 px-6 py-3 font-sans cursor-pointer" style={{ background: "var(--accent-saffron)", color: "var(--text-inverse)" }}>
                 <Upload size={16} strokeWidth={1.5} /> {uploading ? "Uploading…" : "Choose Image"}
                 <input data-testid="gallery-file-input" type="file" accept="image/*" className="hidden" onChange={uploadImage} disabled={uploading} />
               </label>
             </div>
+
+            <div className="flex flex-wrap gap-2 mb-5">
+              <button data-testid="gallery-filter-all" onClick={() => setGalleryFilter("all")}
+                className="px-3 py-1.5 text-sm font-sans border"
+                style={{ borderColor: galleryFilter === "all" ? "var(--accent-saffron)" : "var(--border-light)", background: galleryFilter === "all" ? "var(--accent-saffron)" : "transparent", color: galleryFilter === "all" ? "#fff" : "var(--text-secondary)" }}>All</button>
+              {PHOTO_CATEGORIES.map((c) => (
+                <button key={c.value} data-testid={`gallery-filter-${c.value}`} onClick={() => setGalleryFilter(c.value)}
+                  className="px-3 py-1.5 text-sm font-sans border"
+                  style={{ borderColor: galleryFilter === c.value ? "var(--accent-saffron)" : "var(--border-light)", background: galleryFilter === c.value ? "var(--accent-saffron)" : "transparent", color: galleryFilter === c.value ? "#fff" : "var(--text-secondary)" }}>{c.label}</button>
+              ))}
+            </div>
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {gallery.length === 0 && <p className="font-sans col-span-full" style={{ color: "var(--text-secondary)" }}>No images uploaded yet. The public gallery is showing sample images until you add your own.</p>}
-              {gallery.map((g) => (
-                <div key={g.id} data-testid={`admin-gallery-${g.id}`} className="relative group overflow-hidden">
+              {gallery.filter((g) => galleryFilter === "all" || (g.category || "gallery") === galleryFilter).length === 0 &&
+                <p className="font-sans col-span-full" style={{ color: "var(--text-secondary)" }}>No images in this category yet.</p>}
+              {gallery.filter((g) => galleryFilter === "all" || (g.category || "gallery") === galleryFilter).map((g) => (
+                <div key={g.id} data-testid={`admin-gallery-${g.id}`} className="relative group overflow-hidden" style={{ background: "var(--bg-primary)" }}>
                   <img src={imageUrl(g.id)} alt={g.caption} className="w-full h-40 object-cover" />
                   <button data-testid={`gallery-delete-${g.id}`} onClick={() => deleteImage(g.id)}
                     className="absolute top-2 right-2 p-2 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(0,0,0,0.6)", color: "#fff" }}>
                     <Trash2 size={16} strokeWidth={1.5} />
                   </button>
-                  {g.caption && <div className="p-2 text-sm font-sans" style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}>{g.caption}</div>}
+                  <div className="p-2" style={{ background: "var(--bg-primary)" }}>
+                    <span className="label-eyebrow" style={{ fontSize: "0.55rem", color: "var(--accent-saffron)" }}>{catLabel(g.category || "gallery")}</span>
+                    {g.caption && <div className="text-sm font-sans" style={{ color: "var(--text-primary)" }}>{g.caption}</div>}
+                  </div>
                 </div>
               ))}
             </div>

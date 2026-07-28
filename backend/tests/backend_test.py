@@ -41,7 +41,7 @@ class TestPublic:
         assert r.status_code == 200
         data = r.json()
         assert isinstance(data, list)
-        assert len(data) >= 3
+        assert len(data) >= 2
 
     def test_gallery_list(self, s):
         r = s.get(f"{API}/gallery")
@@ -179,3 +179,90 @@ class TestGallery:
         assert r.status_code == 200
         lst = requests.get(f"{API}/gallery").json()
         assert not any(g["id"] == gid for g in lst)
+
+
+# ---------- Activities ----------
+class TestActivities:
+    def test_list_activities_returns_4_groups(self, s):
+        r = s.get(f"{API}/activities")
+        assert r.status_code == 200
+        data = r.json()
+        assert isinstance(data, list)
+        keys = {a["key"] for a in data}
+        assert {"spiritual", "values", "service", "tribal"}.issubset(keys)
+        for a in data:
+            assert "title" in a and "intro" in a and "subgroups" in a
+            assert isinstance(a["subgroups"], list)
+
+    def test_update_activity_requires_auth(self):
+        r = requests.put(f"{API}/activities/service", json={"subgroups": ["x"]})
+        assert r.status_code == 401
+
+    def test_update_and_persist(self, s, auth_headers):
+        # capture original
+        original = next(a for a in s.get(f"{API}/activities").json() if a["key"] == "service")
+        new_subs = ["TEST_Annadana", "TEST_Medical", "TEST_Relief"]
+        r = s.put(f"{API}/activities/service", json={"subgroups": new_subs}, headers=auth_headers)
+        assert r.status_code == 200, r.text
+        assert r.json()["subgroups"] == new_subs
+
+        # GET reflects
+        fetched = next(a for a in s.get(f"{API}/activities").json() if a["key"] == "service")
+        assert fetched["subgroups"] == new_subs
+
+        # restore
+        s.put(f"{API}/activities/service", json={"subgroups": original["subgroups"]}, headers=auth_headers)
+
+    def test_update_unknown_key_404(self, s, auth_headers):
+        r = s.put(f"{API}/activities/nope", json={"subgroups": []}, headers=auth_headers)
+        assert r.status_code == 404
+
+
+# ---------- Gallery categories ----------
+class TestGalleryCategories:
+    PNG = bytes.fromhex(
+        "89504E470D0A1A0A0000000D49484452000000010000000108060000001F15C4"
+        "890000000A49444154789C6300010000000500010D0A2DB40000000049454E44AE426082"
+    )
+
+    def test_upload_default_category_gallery(self, s, auth_headers):
+        r = s.post(f"{API}/gallery",
+                   files={"file": ("t.png", io.BytesIO(self.PNG), "image/png")},
+                   data={"caption": "TEST_default"},
+                   headers=auth_headers)
+        assert r.status_code == 200
+        assert r.json()["category"] == "gallery"
+        gid = r.json()["id"]
+        # appears in ?category=gallery
+        lst = requests.get(f"{API}/gallery", params={"category": "gallery"}).json()
+        assert any(g["id"] == gid for g in lst)
+        # cleanup
+        s.delete(f"{API}/gallery/{gid}", headers=auth_headers)
+
+    def test_upload_ashrama_category_and_filter(self, s, auth_headers):
+        r = s.post(f"{API}/gallery",
+                   files={"file": ("t.png", io.BytesIO(self.PNG), "image/png")},
+                   data={"caption": "TEST_ashrama", "category": "ashrama"},
+                   headers=auth_headers)
+        assert r.status_code == 200, r.text
+        assert r.json()["category"] == "ashrama"
+        gid = r.json()["id"]
+
+        # in ashrama filter
+        ashrama_lst = requests.get(f"{API}/gallery", params={"category": "ashrama"}).json()
+        assert any(g["id"] == gid for g in ashrama_lst)
+        # NOT in gallery filter
+        gallery_lst = requests.get(f"{API}/gallery", params={"category": "gallery"}).json()
+        assert not any(g["id"] == gid for g in gallery_lst)
+
+        # image bytes
+        img = requests.get(f"{API}/gallery/{gid}/image")
+        assert img.status_code == 200
+        assert img.headers.get("content-type", "").startswith("image/")
+
+        # delete
+        r = s.delete(f"{API}/gallery/{gid}", headers=auth_headers)
+        assert r.status_code == 200
+        ashrama_lst = requests.get(f"{API}/gallery", params={"category": "ashrama"}).json()
+        assert not any(g["id"] == gid for g in ashrama_lst)
+

@@ -6,6 +6,8 @@ import AboutUs from "../components/sections/AboutUs";
 import Activities from "../components/sections/Activities";
 import Events from "../components/sections/Events";
 import Gallery from "../components/sections/Gallery";
+import AshramaCarousel from "../components/sections/AshramaCarousel";
+import VisitUs from "../components/sections/VisitUs";
 import Donate from "../components/sections/Donate";
 import Contact from "../components/sections/Contact";
 
@@ -20,6 +22,8 @@ const Home = () => (
       <Activities />
       <Events />
       <Gallery />
+      <AshramaCarousel />
+      <VisitUs />
       <Donate />
       <Contact />
     </main>

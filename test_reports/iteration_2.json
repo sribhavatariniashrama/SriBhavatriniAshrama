@@ -1,0 +1,28 @@
+{
+  "summary": "Iteration 2: full backend + frontend E2E testing of new features (Activities accordion + editable subgroups, Visit Us map/hours, Ashrama carousel, Gallery categories). Backend pytest: 24/24 passing (7 new tests added for activities CRUD/auth and gallery category default+filter+persistence). Frontend: Home shows all new sections (activities, activities-accordion, visit, visit-map, visit-hours, ashrama-carousel). Navbar Lenis smooth-scroll works (Our Activities click moves scrollY 0 -> 2437). Accordion expands with subgroups; 4 groups present (spiritual/values/service/tribal). Visit hours card renders 'MONDAY — SUNDAY', '6:00 AM — 12:00 Noon', '5:00 PM — 8:00 PM'. Google Maps iframe src verified. Ashrama carousel prev/next buttons clickable. Admin: login OK, new Activities tab present, subgroups textarea + Save writes to backend (verified via /api/activities GET), 'Activity updated' toast appears. Gallery tab shows category dropdown and 7 category filter buttons (all/gallery/ashrama/spiritual/values/service/tribal). Regression: events CRUD, contact submit, admin login/logout all still passing.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Footer 'SACRED HOURS'", "issues": ["Footer shows 'Morning Darshan 6:00 – 9:00 AM' and 'Evening Aarti 6:30 – 8:00 PM' which does NOT match the Visit Us card hours (6:00 AM — 12:00 Noon and 5:00 PM — 8:00 PM). Inconsistent hours between footer and Visit Us section — likely a content bug."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Reconcile darshan hours in Footer (SACRED HOURS block) with Visit Us hours card — they show different times."
+  ],
+  "critical_code_review_comments": [
+    "server.py: PUT /api/activities/{key} accepts subgroups=[] and strips empty strings — behavior is fine but consider validating min length or restricting key to known set for defense in depth.",
+    "Gallery upload has no server-side file-size or content-type allowlist enforcement (still open from iter 1).",
+    "Activities endpoint does not paginate/limit list (fine while N=4)."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (24/24)", "frontend": "100% for tested flows"},
+  "test_credentials": "admin@bhavatarini.org / Ashrama@2025 (verified)",
+  "seed_data_creation": "Backend seeds 4 activity groups (spiritual, values, service, tribal) and 2 sample events on startup — verified. Test 'service' subgroups were mutated + restored during test.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All new iteration-2 features working end-to-end. Only design/content issue: Footer sacred-hours differ from Visit Us section — needs main agent to decide canonical times. Razorpay/Resend still unconfigured (expected). Admin dashboard renders at /admin route (not /admin/dashboard).",
+  "rca of the issue": "N/A — no functional bugs. Minor content inconsistency between Footer and Visit Us hours flagged for main agent review."
+}

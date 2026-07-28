@@ -9,7 +9,7 @@ const CHAPTERS = [
   {
     n: "02",
     title: "Our Purpose",
-    body: "We exist to create a refuge of stillness in a restless world. Here, seekers of every background gather to still the mind, open the heart, and rediscover the sacred that already dwells within them.",
+    body: "To share the path to discover the divinity within, as taught by Sri Ramakrishna, Sri Sharada Devi and Swami Vivekananda; and to serve society as a path of Sadhana.",
   },
   {
     n: "03",

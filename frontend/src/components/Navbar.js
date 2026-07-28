@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLenis } from "lenis/react";
 
 const LINKS = [
   { label: "About Us", id: "about" },
@@ -13,6 +14,7 @@ const LINKS = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -23,7 +25,9 @@ const Navbar = () => {
   const go = (id) => {
     setOpen(false);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (!el) return;
+    if (lenis) lenis.scrollTo(el, { offset: -70 });
+    else el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -37,7 +41,7 @@ const Navbar = () => {
       }}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
-        <button data-testid="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        <button data-testid="nav-logo" onClick={() => (lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" }))}
           className="text-left leading-none">
           <div className="font-serif text-xl md:text-2xl font-600 tracking-tight" style={{ color: "var(--bg-maroon)" }}>
             Sri Bhavatarini

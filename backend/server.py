@@ -242,13 +242,17 @@ async def delete_event(event_id: str, admin: dict = Depends(get_current_admin)):
 # Gallery
 # ---------------------------------------------------------------------------
 @api_router.get("/gallery")
-async def list_gallery():
-    items = await db.gallery.find({"is_deleted": False}, {"_id": 0, "storage_path": 0}).sort("created_at", -1).to_list(1000)
+async def list_gallery(category: Optional[str] = None):
+    query = {"is_deleted": False}
+    if category:
+        query["category"] = category
+    items = await db.gallery.find(query, {"_id": 0, "storage_path": 0}).sort("created_at", -1).to_list(2000)
     return items
 
 
 @api_router.post("/gallery")
 async def upload_gallery(file: UploadFile = File(...), caption: str = Form(""),
+                         category: str = Form("gallery"),
                          admin: dict = Depends(get_current_admin)):
     ext = (file.filename.split(".")[-1].lower() if "." in file.filename else "bin")
     content_type = MIME_TYPES.get(ext, file.content_type or "application/octet-stream")
@@ -261,10 +265,11 @@ async def upload_gallery(file: UploadFile = File(...), caption: str = Form(""),
         logger.error(f"Upload failed: {e}")
         raise HTTPException(status_code=500, detail="Image upload failed")
     doc = {"id": img_id, "storage_path": result["path"], "caption": caption,
+           "category": category or "gallery",
            "content_type": content_type, "original_filename": file.filename,
            "is_deleted": False, "created_at": datetime.now(timezone.utc).isoformat()}
     await db.gallery.insert_one(doc)
-    return {"id": img_id, "caption": caption, "created_at": doc["created_at"]}
+    return {"id": img_id, "caption": caption, "category": doc["category"], "created_at": doc["created_at"]}
 
 
 @api_router.get("/gallery/{img_id}/image")
@@ -286,6 +291,34 @@ async def delete_gallery(img_id: str, admin: dict = Depends(get_current_admin)):
     if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="Image not found")
     return {"status": "deleted"}
+
+
+# ---------------------------------------------------------------------------
+# Activities (groups + editable sub-groups)
+# ---------------------------------------------------------------------------
+class ActivityUpdate(BaseModel):
+    title: Optional[str] = None
+    intro: Optional[str] = None
+    subgroups: List[str] = []
+
+
+@api_router.get("/activities")
+async def list_activities():
+    return await db.activities.find({}, {"_id": 0}).sort("order", 1).to_list(50)
+
+
+@api_router.put("/activities/{key}")
+async def update_activity(key: str, body: ActivityUpdate, admin: dict = Depends(get_current_admin)):
+    existing = await db.activities.find_one({"key": key})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Activity group not found")
+    update = {"subgroups": [s for s in body.subgroups if s.strip()]}
+    if body.title is not None:
+        update["title"] = body.title
+    if body.intro is not None:
+        update["intro"] = body.intro
+    await db.activities.update_one({"key": key}, {"$set": update})
+    return await db.activities.find_one({"key": key}, {"_id": 0})
 
 
 # ---------------------------------------------------------------------------
@@ -412,6 +445,23 @@ async def startup():
             s["created_at"] = datetime.now(timezone.utc).isoformat()
         await db.events.insert_many(samples)
         logger.info("Sample events seeded")
+    if await db.activities.count_documents({}) == 0:
+        groups = [
+            {"key": "spiritual", "order": 1, "title": "Spiritual Activities",
+             "intro": "The living heart of the ashrama — worship, meditation and study.",
+             "subgroups": ["Daily Puja & Aarti", "Guided Meditation & Dhyana", "Weekly Satsang & Bhajans", "Scriptural Study Classes"]},
+            {"key": "values", "order": 2, "title": "'Excellence Through Values' Programmes",
+             "intro": "Character-building and value education for students and youth.",
+             "subgroups": ["Value Education Workshops", "Youth Leadership Camps", "Personality Development", "Moral Story Sessions for Children"]},
+            {"key": "service", "order": 3, "title": "Service Projects",
+             "intro": "Serving the Divine in all beings through compassionate action.",
+             "subgroups": ["Annadana (Free Meals)", "Medical Camps", "Community Care", "Disaster Relief"]},
+            {"key": "tribal", "order": 4, "title": "Tribal Welfare Project",
+             "intro": "Education, healthcare and livelihood support for tribal communities.",
+             "subgroups": ["Tribal School Support", "Healthcare Outreach", "Livelihood Training", "Cultural Preservation"]},
+        ]
+        await db.activities.insert_many(groups)
+        logger.info("Activity groups seeded")
     if EMERGENT_LLM_KEY:
         try:
             init_storage()

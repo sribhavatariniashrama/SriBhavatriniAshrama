@@ -16,7 +16,7 @@ const Gallery = () => {
   const [active, setActive] = useState(null);
 
   useEffect(() => {
-    api.get("/gallery").then(({ data }) => {
+    api.get("/gallery?category=gallery").then(({ data }) => {
       if (data && data.length) setItems(data.map((g) => ({ ...g, url: imageUrl(g.id) })));
       else setItems(FALLBACK);
     }).catch(() => setItems(FALLBACK));
