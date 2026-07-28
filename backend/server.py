@@ -449,16 +449,16 @@ async def startup():
         groups = [
             {"key": "spiritual", "order": 1, "title": "Spiritual Activities",
              "intro": "The living heart of the ashrama — worship, meditation and study.",
-             "subgroups": ["Daily Puja & Aarti", "Guided Meditation & Dhyana", "Weekly Satsang & Bhajans", "Scriptural Study Classes"]},
+             "subgroups": ["Daily Pooja, Sandhyarati and Bhajans", "Weekly Discourses", "Homa on special days like Jayantis of Divine Trio, Durgashtami etc.", "Japa Yajnas and Dhyana Shibiras", "Spiritual Satsangs and Shibiras", "Festival celebrations like Ramanavami, Janmashtami, Navaratri, Shivaratri etc."]},
             {"key": "values", "order": 2, "title": "'Excellence Through Values' Programmes",
              "intro": "Character-building and value education for students and youth.",
-             "subgroups": ["Value Education Workshops", "Youth Leadership Camps", "Personality Development", "Moral Story Sessions for Children"]},
+             "subgroups": ["Value education classes and annual camps for children", "Conventions, seminars and camps for youth", "Conventions and workshops for teachers", "Parent Enrichment Programmes"]},
             {"key": "service", "order": 3, "title": "Service Projects",
              "intro": "Serving the Divine in all beings through compassionate action.",
-             "subgroups": ["Annadana (Free Meals)", "Medical Camps", "Community Care", "Disaster Relief"]},
+             "subgroups": ["Educational Support & Scholarship Programme", "Clothing & Blanket Distribution Programme", "Student Coaching Initiative", "Public Awareness & Cleanliness Drive", "Tree Plantation & Environmental Awareness Programme"]},
             {"key": "tribal", "order": 4, "title": "Tribal Welfare Project",
-             "intro": "Education, healthcare and livelihood support for tribal communities.",
-             "subgroups": ["Tribal School Support", "Healthcare Outreach", "Livelihood Training", "Cultural Preservation"]},
+             "intro": "Since 2022, our Tribal Welfare Project has been serving tribal communities in the remote settlements of Magadi Taluk, where many families face challenging living conditions. Through this initiative, we provide essential support, including books, school bags, stationery, blankets, tarpaulins, clothing, utensils, and provisions, helping improve their quality of life and promote education and well-being.",
+             "subgroups": []},
         ]
         await db.activities.insert_many(groups)
         logger.info("Activity groups seeded")
