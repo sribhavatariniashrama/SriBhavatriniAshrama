@@ -36,7 +36,7 @@ const Hero = () => {
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden mx-auto"
-            style={{ borderTopLeftRadius: "50%", borderTopRightRadius: "50%", height: "68vh", maxHeight: 620 }}>
+            style={{ height: "68vh", maxHeight: 620 }}>
             <motion.img src={HERO_IMG} alt="Temple architecture" style={{ y: imgY, scale }}
               className="w-full h-[120%] object-cover" />
           </motion.div>

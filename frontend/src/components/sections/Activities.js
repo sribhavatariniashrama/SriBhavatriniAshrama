@@ -69,11 +69,11 @@ const Activities = () => {
                             Photos coming soon
                           </div>
                         ) : (
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            {imgs.slice(0, 6).map((im) => (
-                              <figure key={im.id} data-testid={`activity-photo-${im.id}`} className="group overflow-hidden">
+                          <div className="columns-2 sm:columns-3 gap-3 [&>*]:mb-3">
+                            {imgs.slice(0, 9).map((im) => (
+                              <figure key={im.id} data-testid={`activity-photo-${im.id}`} className="group overflow-hidden break-inside-avoid">
                                 <img src={imageUrl(im.id)} alt={im.caption || g.title} loading="lazy"
-                                  className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-105" />
+                                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]" />
                                 {im.caption && (
                                   <figcaption className="mt-1 font-sans text-xs" style={{ color: "#8A8078" }}>{im.caption}</figcaption>
                                 )}
