@@ -23,9 +23,9 @@ const Footer = () => (
             <a href="mailto:sri.bhavatarini.ashrama@gmail.com" className="hover:text-[var(--accent-saffron)] transition-colors break-all">sri.bhavatarini.ashrama@gmail.com</a></div>
         </div>
         <div className="font-sans text-sm" style={{ color: "#B5ABA0" }}>
-          <div className="label-eyebrow mb-4">Sacred Hours</div>
-          <p>Morning Darshan · 6:00 – 9:00 AM</p>
-          <p>Evening Aarti · 6:30 – 8:00 PM</p>
+          <div className="label-eyebrow mb-4">Darshan Hours</div>
+          <p>Morning · 6:00 AM – 12:00 Noon</p>
+          <p>Evening · 5:00 PM – 8:00 PM</p>
           <p className="mt-4">Open all days of the week</p>
         </div>
       </div>
