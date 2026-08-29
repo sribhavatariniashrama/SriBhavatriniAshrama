@@ -15,6 +15,11 @@ const PHOTO_CATEGORIES = [
   { value: "values", label: "Activity · Excellence Through Values" },
   { value: "service", label: "Activity · Service Projects" },
   { value: "tribal", label: "Activity · Tribal Welfare" },
+  { value: "ideal_ramakrishna", label: "Ideal · Sri Ramakrishna Paramahamsa" },
+  { value: "ideal_sarada", label: "Ideal · Sri Sharada Devi" },
+  { value: "ideal_vivekananda", label: "Ideal · Swami Vivekananda" },
+  { value: "ideal_ranganathananda", label: "Ideal · Swami Ranganathananda" },
+  { value: "ideal_purushottamananda", label: "Ideal · Swami Purushottamananda" },
 ];
 const catLabel = (v) => (PHOTO_CATEGORIES.find((c) => c.value === v) || {}).label || v;
 
@@ -33,16 +38,22 @@ const AdminDashboard = () => {
   const [galleryFilter, setGalleryFilter] = useState("all");
   const [activities, setActivities] = useState([]);
   const [activityDrafts, setActivityDrafts] = useState({});
+  const [ideals, setIdeals] = useState([]);
+  const [idealDrafts, setIdealDrafts] = useState({});
 
   const loadAll = useCallback(async () => {
     try {
-      const [e, g, m, d, a] = await Promise.all([
-        api.get("/events"), api.get("/gallery"), api.get("/messages"), api.get("/donations"), api.get("/activities"),
+      const [e, g, m, d, a, i] = await Promise.all([
+        api.get("/events"), api.get("/gallery"), api.get("/messages"), api.get("/donations"),
+        api.get("/activities"), api.get("/ideals"),
       ]);
-      setEvents(e.data); setGallery(g.data); setMessages(m.data); setDonations(d.data); setActivities(a.data);
+      setEvents(e.data); setGallery(g.data); setMessages(m.data); setDonations(d.data); setActivities(a.data); setIdeals(i.data);
       const drafts = {};
       a.data.forEach((grp) => { drafts[grp.key] = (grp.subgroups || []).join("\n"); });
       setActivityDrafts(drafts);
+      const idr = {};
+      i.data.forEach((p) => { idr[p.key] = p.bio || ""; });
+      setIdealDrafts(idr);
     } catch (err) {
       if (err.response?.status === 401) { logout(); navigate("/admin/login"); }
     }
@@ -100,6 +111,14 @@ const AdminDashboard = () => {
     } catch (err) { toast.error(formatApiErrorDetail(err.response?.data?.detail)); }
   };
 
+  const saveIdeal = async (key) => {
+    try {
+      await api.put(`/ideals/${key}`, { bio: idealDrafts[key] || "" });
+      toast.success("Guiding Ideal updated");
+      loadAll();
+    } catch (err) { toast.error(formatApiErrorDetail(err.response?.data?.detail)); }
+  };
+
   const inputCls = "w-full px-4 py-3 font-sans outline-none border focus:border-[var(--accent-saffron)] transition-colors";
   const inputStyle = { borderColor: "var(--border-light)", background: "var(--bg-primary)" };
 
@@ -125,6 +144,7 @@ const AdminDashboard = () => {
           <TabsList data-testid="admin-tabs" className="mb-8 flex-wrap h-auto">
             <TabsTrigger value="events" data-testid="tab-events">Events</TabsTrigger>
             <TabsTrigger value="activities" data-testid="tab-activities">Activities</TabsTrigger>
+            <TabsTrigger value="ideals" data-testid="tab-ideals">Guiding Ideals</TabsTrigger>
             <TabsTrigger value="gallery" data-testid="tab-gallery">Gallery</TabsTrigger>
             <TabsTrigger value="messages" data-testid="tab-messages">Messages ({messages.length})</TabsTrigger>
             <TabsTrigger value="donations" data-testid="tab-donations">Donations ({donations.length})</TabsTrigger>
@@ -187,6 +207,29 @@ const AdminDashboard = () => {
               ))}
             </div>
           </TabsContent>
+
+          {/* IDEALS */}
+          <TabsContent value="ideals">
+            <p className="font-sans mb-6" style={{ color: "var(--text-secondary)" }}>
+              Edit each Guiding Ideal's bio here. Upload their photo from the Gallery tab by selecting the matching "Ideal · …" category.
+            </p>
+            <div className="space-y-4">
+              {ideals.map((p) => (
+                <div key={p.key} data-testid={`admin-ideal-${p.key}`} className="p-6" style={{ background: "var(--bg-primary)" }}>
+                  <h3 className="font-serif text-2xl mb-3" style={{ color: "var(--text-primary)" }}>{p.name}</h3>
+                  <textarea data-testid={`ideal-bio-${p.key}`} rows={4}
+                    value={idealDrafts[p.key] || ""}
+                    onChange={(e) => setIdealDrafts({ ...idealDrafts, [p.key]: e.target.value })}
+                    className={inputCls + " resize-none"} style={inputStyle} />
+                  <button data-testid={`ideal-save-${p.key}`} onClick={() => saveIdeal(p.key)}
+                    className="mt-3 px-6 py-2.5 font-sans" style={{ background: "var(--accent-saffron)", color: "var(--text-inverse)" }}>
+                    Save bio
+                  </button>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
           <TabsContent value="gallery">
             <div className="p-6 mb-8" style={{ background: "var(--bg-primary)" }}>
               <h3 className="font-serif text-2xl mb-4" style={{ color: "var(--text-primary)" }}>Upload Image</h3>

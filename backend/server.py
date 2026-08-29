@@ -322,6 +322,32 @@ async def update_activity(key: str, body: ActivityUpdate, admin: dict = Depends(
 
 
 # ---------------------------------------------------------------------------
+# Guiding Ideals
+# ---------------------------------------------------------------------------
+class IdealUpdate(BaseModel):
+    name: Optional[str] = None
+    bio: Optional[str] = None
+
+
+@api_router.get("/ideals")
+async def list_ideals():
+    return await db.ideals.find({}, {"_id": 0}).sort("order", 1).to_list(50)
+
+
+@api_router.put("/ideals/{key}")
+async def update_ideal(key: str, body: IdealUpdate, admin: dict = Depends(get_current_admin)):
+    existing = await db.ideals.find_one({"key": key})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Ideal not found")
+    update = {}
+    if body.name is not None: update["name"] = body.name
+    if body.bio is not None: update["bio"] = body.bio
+    if update:
+        await db.ideals.update_one({"key": key}, {"$set": update})
+    return await db.ideals.find_one({"key": key}, {"_id": 0})
+
+
+# ---------------------------------------------------------------------------
 # Contact
 # ---------------------------------------------------------------------------
 async def _send_contact_email(body: ContactIn):
@@ -450,7 +476,7 @@ async def startup():
             {"key": "spiritual", "order": 1, "title": "Spiritual Activities",
              "intro": "The living heart of the ashrama — worship, meditation and study.",
              "subgroups": ["Daily Pooja, Sandhyarati and Bhajans", "Weekly Discourses", "Homa on special days like Jayantis of Divine Trio, Durgashtami etc.", "Japa Yajnas and Dhyana Shibiras", "Spiritual Satsangs and Shibiras", "Festival celebrations like Ramanavami, Janmashtami, Navaratri, Shivaratri etc."]},
-            {"key": "values", "order": 2, "title": "'Excellence Through Values' Programmes",
+            {"key": "values", "order": 2, "title": "'Excellence Through Values' Programmes for students, youth and teachers",
              "intro": "Character-building and value education for students and youth.",
              "subgroups": ["Value education classes and annual camps for children", "Conventions, seminars and camps for youth", "Conventions and workshops for teachers", "Parent Enrichment Programmes"]},
             {"key": "service", "order": 3, "title": "Service Projects",
@@ -462,6 +488,21 @@ async def startup():
         ]
         await db.activities.insert_many(groups)
         logger.info("Activity groups seeded")
+    if await db.ideals.count_documents({}) == 0:
+        ideals = [
+            {"key": "ramakrishna", "order": 1, "name": "Sri Ramakrishna Paramahamsa",
+             "bio": "A God-realised mystic of nineteenth-century Bengal whose life demonstrated the harmony of all faiths and the direct experience of the Divine through simple, wholehearted love."},
+            {"key": "sarada", "order": 2, "name": "Sri Sharada Devi",
+             "bio": "The consort of Sri Ramakrishna, revered as the Holy Mother — an embodiment of quiet strength, motherly compassion and unshakeable equanimity."},
+            {"key": "vivekananda", "order": 3, "name": "Swami Vivekananda",
+             "bio": "Foremost disciple of Sri Ramakrishna, who carried the message of Vedanta to the world and awakened India with the ideal that service to all beings is the highest worship."},
+            {"key": "ranganathananda", "order": 4, "name": "Swami Ranganathananda",
+             "bio": "The thirteenth President of the Ramakrishna Order — a luminous orator and scholar who reinterpreted Vedanta for the modern age with clarity, dignity and universal appeal."},
+            {"key": "purushottamananda", "order": 5, "name": "Swami Purushottamananda",
+             "bio": "A revered monk of the Ramakrishna Order who served with quiet devotion at the Ramakrishna Math branches of Basavanagudi, Ponnampet and Belagavi, guiding countless devotees on the spiritual path."},
+        ]
+        await db.ideals.insert_many(ideals)
+        logger.info("Guiding Ideals seeded")
     if EMERGENT_LLM_KEY:
         try:
             init_storage()

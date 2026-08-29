@@ -5,6 +5,7 @@ import { useLenis } from "lenis/react";
 
 const LINKS = [
   { label: "About Us", id: "about" },
+  { label: "Our Guiding Ideals", id: "ideals" },
   { label: "Our Activities", id: "activities" },
   { label: "Events", id: "events" },
   { label: "Gallery", id: "gallery" },
@@ -43,13 +44,13 @@ const Navbar = () => {
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
         <button data-testid="nav-logo" onClick={() => (lenis ? lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: "smooth" }))}
           className="text-left leading-none">
-          <div className="font-serif text-xl md:text-2xl font-600 tracking-tight" style={{ color: "var(--bg-maroon)" }}>
-            Sri Bhavatarini
+          <div className="font-serif text-lg md:text-xl font-600 tracking-tight leading-tight" style={{ color: "var(--bg-maroon)" }}>
+            Sri Bhavatarini Ashrama
           </div>
-          <div className="label-eyebrow" style={{ fontSize: "0.6rem" }}>Ashrama</div>
+          <div className="label-eyebrow mt-0.5" style={{ fontSize: "0.6rem" }}>Saraswatinagara, Bengaluru</div>
         </button>
 
-        <nav className="hidden lg:flex items-center gap-9">
+        <nav className="hidden xl:flex items-center gap-7">
           {LINKS.map((l) => (
             <button
               key={l.id}
@@ -71,7 +72,7 @@ const Navbar = () => {
           </button>
         </nav>
 
-        <button className="lg:hidden" data-testid="nav-mobile-toggle" onClick={() => setOpen(!open)}>
+        <button className="xl:hidden" data-testid="nav-mobile-toggle" onClick={() => setOpen(!open)}>
           {open ? <X strokeWidth={1.5} /> : <Menu strokeWidth={1.5} />}
         </button>
       </div>
@@ -82,7 +83,7 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden overflow-hidden"
+            className="xl:hidden overflow-hidden"
             style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-light)" }}
           >
             <div className="px-6 py-6 flex flex-col gap-4">
