@@ -499,7 +499,7 @@ async def startup():
             {"key": "ranganathananda", "order": 4, "name": "Swami Ranganathananda",
              "bio": "The thirteenth President of the Ramakrishna Order — a luminous orator and scholar who reinterpreted Vedanta for the modern age with clarity, dignity and universal appeal."},
             {"key": "purushottamananda", "order": 5, "name": "Swami Purushottamananda",
-             "bio": "A revered monk of the Ramakrishna Order who served with quiet devotion at the Ramakrishna Math branches of Basavanagudi, Ponnampet and Belagavi, guiding countless devotees on the spiritual path."},
+             "bio": "A revered monk of the Ramakrishna Order who served with quiet devotion at the Ramakrishna Math branches of Basavanagudi, Ponnampet and Belagavi, guiding countless devotees on the spiritual path. He was also a gifted and soulful singer, whose melodious voice and devotional singing touched the hearts of all who had the privilege of listening to him."},
         ]
         await db.ideals.insert_many(ideals)
         logger.info("Guiding Ideals seeded")
