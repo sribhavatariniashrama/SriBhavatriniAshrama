@@ -24,10 +24,13 @@ const Events = () => {
     <section id="events" data-testid="events" className="py-28 md:py-40" style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         <Reveal>
-          <div className="label-eyebrow mb-6">Events</div>
+          <div className="label-eyebrow mb-6">Upcoming Events</div>
           <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tighter" style={{ color: "var(--text-primary)" }}>
-            Gatherings & <span className="italic" style={{ color: "var(--accent-saffron)" }}>festivals.</span>
+            25<sup className="text-2xl md:text-3xl align-super">th</sup> Anniversary <span className="italic" style={{ color: "var(--accent-saffron)" }}>celebrations.</span>
           </h2>
+          <p className="mt-6 font-sans text-base md:text-lg max-w-xl" style={{ color: "var(--text-secondary)" }}>
+            Join us at Sri Bhavatarini Ashrama, Polohalli, Magadi for five days of devotion and festivity. All are welcome.
+          </p>
         </Reveal>
 
         <div className="mt-16">
