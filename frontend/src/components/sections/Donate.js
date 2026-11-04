@@ -75,6 +75,17 @@ const Donate = () => {
             Every contribution sustains our daily worship, free meals through Annadana,
             and service to the community. Give from the heart.
           </p>
+
+          <div data-testid="bank-details" className="mt-10 max-w-md p-6 border"
+            style={{ borderColor: "rgba(232,218,210,0.25)", background: "rgba(0,0,0,0.18)" }}>
+            <div className="label-eyebrow mb-4" style={{ color: "var(--accent-saffron)" }}>Bank Transfer Details</div>
+            <dl className="space-y-3 font-sans text-sm" style={{ color: "#E8DAD2" }}>
+              <div className="flex justify-between gap-6"><dt className="opacity-70">Bank Name</dt><dd className="font-serif text-base" style={{ color: "var(--text-inverse)" }}>HDFC Bank</dd></div>
+              <div className="flex justify-between gap-6"><dt className="opacity-70">A/c Name</dt><dd className="font-serif text-base text-right" style={{ color: "var(--text-inverse)" }}>Sri Bhavatarini Ashrama</dd></div>
+              <div className="flex justify-between gap-6"><dt className="opacity-70">A/c Number</dt><dd data-testid="bank-account" className="font-mono tracking-wider" style={{ color: "var(--text-inverse)" }}>50100608663391</dd></div>
+              <div className="flex justify-between gap-6"><dt className="opacity-70">IFSC</dt><dd data-testid="bank-ifsc" className="font-mono tracking-wider" style={{ color: "var(--text-inverse)" }}>HDFC0004895</dd></div>
+            </dl>
+          </div>
         </Reveal>
 
         <Reveal delay={0.1}>
