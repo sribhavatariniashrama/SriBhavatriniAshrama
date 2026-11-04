@@ -50,6 +50,9 @@ const PolohalliBranch = () => {
               <p className="font-sans text-base md:text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                 Nestled in the rural setting of Polohalli in Magadi Taluk, our branch ashrama carries the Mother's grace into villages and tribal settlements — offering spiritual solace and compassionate service where it is needed most.
               </p>
+              <p className="mt-4 font-sans text-base md:text-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                The ashrama houses temples of <span style={{ color: "var(--accent-saffron)" }}>Sri Bhavatarini Kali</span>, <span style={{ color: "var(--accent-saffron)" }}>Sri Avimukteshwara Shiva</span> and <span style={{ color: "var(--accent-saffron)" }}>Sri Vidya Ganapati</span>, besides a shrine of the Divine Trio — Sri Ramakrishna, Sri Sharada Devi and Swami Vivekananda.
+              </p>
               <div className="mt-5 flex items-center gap-2 label-eyebrow" style={{ color: "var(--accent-saffron)" }}>
                 <MapPin size={14} strokeWidth={1.5} /> Polohalli · Magadi Taluk · Karnataka
               </div>
