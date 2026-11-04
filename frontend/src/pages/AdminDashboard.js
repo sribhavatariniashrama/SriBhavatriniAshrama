@@ -10,7 +10,7 @@ const EMPTY_EVENT = { title: "", description: "", date: "", time: "", location: 
 
 const PHOTO_CATEGORIES = [
   { value: "gallery", label: "Gallery" },
-  { value: "ashrama", label: "Our Ashrama (Home slider)" },
+  { value: "polohalli", label: "Polohalli Branch (Home slider)" },
   { value: "spiritual", label: "Activity · Spiritual Activities" },
   { value: "values", label: "Activity · Excellence Through Values" },
   { value: "service", label: "Activity · Service Projects" },
